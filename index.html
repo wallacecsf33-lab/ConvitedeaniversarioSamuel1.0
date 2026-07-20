@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convite Wallace & Suanny</title>
+
+<style>
+
+body {
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#efeae4,#e4d7cf);
+font-family: 'Georgia', serif;
+overflow:hidden;
+}
+
+.container {
+text-align:center;
+animation: fadeIn 1.5s ease;
+}
+
+.capa {
+width:85%;
+max-width:360px;
+border-radius:20px;
+cursor:pointer;
+transition:0.4s;
+box-shadow:0 15px 40px rgba(0,0,0,0.3);
+animation: brilho 3s infinite alternate;
+}
+
+.capa:hover {
+transform:scale(1.05);
+}
+
+@keyframes brilho {
+from { box-shadow:0 15px 30px rgba(0,0,0,0.3); }
+to { box-shadow:0 20px 50px rgba(255,182,193,0.4); }
+}
+
+.texto-convite {
+margin-top:20px;
+font-size:17px;
+color:#4a2f28;
+line-height:1.5;
+padding:0 25px;
+animation: subirTexto 1.5s ease;
+}
+
+.texto-convite b {
+font-size:18px;
+color:#8b5e57;
+}
+
+@media (max-width:480px){
+.capa{
+width:92%;
+max-width:420px;
+}
+.texto-convite{
+font-size:18px;
+}
+}
+
+@keyframes fadeIn {
+from{opacity:0;}
+to{opacity:1;}
+}
+
+@keyframes subirTexto {
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+.convite {
+display:none;
+max-width:500px;
+animation: zoom 1.2s ease;
+}
+
+.convite img{
+width:100%;
+border-radius:12px;
+}
+
+@keyframes zoom {
+from{opacity:0; transform:scale(1.1);}
+to{opacity:1; transform:scale(1);}
+}
+
+.botoes {
+display:none;
+margin-top:20px;
+padding:20px;
+border-radius:20px;
+background: rgba(0,0,0,0.4);
+backdrop-filter: blur(10px);
+}
+
+button {
+width:100%;
+margin:6px 0;
+padding:14px;
+border:none;
+border-radius:12px;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
+
+.sim{background:#ff4da6;color:white;}
+.nao{background:#ff8c42;color:white;}
+.talvez{background:#aaa;color:white;}
+.maps{background:#333;color:white;}
+.whats{background:#25D366;color:white;}
+
+.msg{
+color:white;
+margin-top:10px;
+}
+
+.heart {
+position:fixed;
+top:-10px;
+font-size:20px;
+animation:fall linear forwards;
+}
+
+@keyframes fall {
+to{transform:translateY(110vh);}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<img src="imagem1.jpeg" class="capa" onclick="abrirConvite()">
+
+<p class="texto-convite">
+Você foi convidado para um momento especial 💍<br>
+<b>Clique para abrir o convite</b>
+</p>
+
+<div class="convite" id="convite">
+<img src="imagem2.png">
+</div>
+
+<div class="botoes" id="botoes">
+
+<p style="color:white;"><b>Você aceita celebrar conosco?</b></p>
+
+<button class="sim" onclick="resposta('sim')">SIM 💖</button>
+<button class="nao" onclick="resposta('nao')">NÃO 🧡</button>
+<button class="talvez" onclick="resposta('talvez')">TALVEZ 🩶</button>
+
+<button class="maps" onclick="abrirMapa()">📍 Ver Local</button>
+<button class="whats" onclick="whats()">💬 Confirmar no WhatsApp</button>
+
+<p class="msg" id="msg"></p>
+
+</div>
+
+</div>
+
+<!-- 🎵 MÚSICA -->
+<audio id="musica" preload="auto" loop>
+<source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+let escolha = "";
+
+function abrirConvite(){
+
+document.querySelector(".capa").style.display="none";
+document.querySelector(".texto-convite").style.display="none";
+
+document.getElementById("convite").style.display="block";
+document.getElementById("botoes").style.display="block";
+
+// 🎵 TOCAR COM FADE-IN
+let audio = document.getElementById("musica");
+audio.volume = 0;
+audio.play().catch(()=>{});
+
+let volume = 0;
+let fade = setInterval(() => {
+    if (volume < 0.4) {
+        volume += 0.02;
+        audio.volume = volume;
+    } else {
+        clearInterval(fade);
+    }
+}, 200);
+
+coracoes();
+}
+
+function coracoes(){
+for(let i=0;i<35;i++){
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="💖";
+h.style.left=Math.random()*100+"vw";
+h.style.animationDuration=(2+Math.random()*3)+"s";
+document.body.appendChild(h);
+}
+}
+
+function resposta(op){
+let msg=document.getElementById("msg");
+escolha = op;
+
+if(op==="sim") msg.innerHTML="💖 Perfeito! Estamos muito felizes!";
+if(op==="nao") msg.innerHTML="🧡 Vamos sentir sua falta!";
+if(op==="talvez") msg.innerHTML="🩶 Esperamos te ver lá!";
+}
+
+function abrirMapa(){
+window.open("https://www.google.com/maps/search/?api=1&query=Restaurante+Skillus+Classic+Recife");
+}
+
+function whats(){
+
+if(escolha === ""){
+alert("Escolha uma opção primeiro 😊");
+return;
+}
+
+let texto="";
+
+if(escolha==="sim") texto="Confirmo presença 💍💖";
+if(escolha==="nao") texto="Não poderei ir 🧡";
+if(escolha==="talvez") texto="Talvez eu vá 🩶";
+
+window.open("https://wa.me/?text="+encodeURIComponent(texto));
+}
+
+</script>
+
+</body>
+</html>
